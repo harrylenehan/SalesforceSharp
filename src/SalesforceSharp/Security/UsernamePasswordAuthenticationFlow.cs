@@ -43,7 +43,7 @@ namespace SalesforceSharp.Security
             this(new RestClient(), clientId, clientSecret, username, password)
         {            
         }
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UsernamePasswordAuthenticationFlow"/> class.
         /// </summary>
@@ -51,7 +51,7 @@ namespace SalesforceSharp.Security
         /// <param name="clientSecret">The client secret.</param>
         /// <param name="username">The username.</param>
         /// <param name="password">The password.</param>
-        /// <param name="password">The token request endpoint url.</param>
+        /// <param name="tokenRequestEndpointUrl">The token request endpoint url.</param>
         public UsernamePasswordAuthenticationFlow(string clientId, string clientSecret, string username, string password, string tokenRequestEndpointUrl) : 
             this(new RestClient(), clientId, clientSecret, username, password, tokenRequestEndpointUrl)
         {            
@@ -65,7 +65,7 @@ namespace SalesforceSharp.Security
         /// <param name="clientSecret">The client secret.</param>
         /// <param name="username">The username.</param>
         /// <param name="password">The password.</param>
-        /// <param name="password">The token request endpoint url.</param>
+        /// <param name="tokenRequestEndpointUrl">The token request endpoint url.</param>
         internal UsernamePasswordAuthenticationFlow(IRestClient restClient, string clientId, string clientSecret, string username, string password, string tokenRequestEndpointUrl = "https://login.salesforce.com/services/oauth2/token")
         {
             ExceptionHelper.ThrowIfNull("restClient", restClient);
@@ -117,6 +117,7 @@ namespace SalesforceSharp.Security
             request.AddParameter("username", m_username);
             request.AddParameter("password", m_password);
 
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11;
             var response = m_restClient.Post(request);
             var isAuthenticated = response.StatusCode == HttpStatusCode.OK;
 
